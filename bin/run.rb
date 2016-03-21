@@ -1,6 +1,18 @@
 require_relative '../db/setup'
 # Remember to put the requires here for all the classes you write and want to use
 
+USERS_LIST = [{:first_name => "Greg", :last_name => "Henry", :age => 34},
+              {:first_name => "Mary", :last_name => "Beth", :age => 45},
+              {:first_name => "Gina", :last_name => "Sue", :age => 66},
+              {:first_name => "David", :last_name => "Illheim", :age => 12},
+              {:first_name => "Ward", :last_name => "Deverson", :age => 24},
+              {:first_name => "Miles", :last_name => "Guster", :age => 72},
+              {:first_name => "Samael", :last_name => "Ouver", :age => 99},
+              {:first_name => "Chuck", :last_name => "Testa", :age => 31},
+              {:first_name => "Dwayne", :last_name => "Johnson", :age => 50},
+              {:first_name => "Tooth", :last_name => "Fairy", :age => 83},]
+
+
 def parse_params(uri_fragments, query_param_string)
   params = {}
   params[:resource]  = uri_fragments[3]
@@ -58,6 +70,29 @@ loop do
     # return an appropriate response
 
     # YOUR CODE GOES BELOW HERE
+    if @request[:subdomain] == "localhost:3000"
+      if @params[:resource] == "users"
+        if @params[:id].nil?
+          puts "#{@request[:http_version]} 200 OK"
+          puts
+          puts
+          USERS_LIST.each do |x|
+            puts "Name: #{x[:first_name]} #{x[:last_name]}   Age: #{x[:age]}"
+          end
+        elsif @params[:id].to_i <= USERS_LIST.length
+          user = USERS_LIST[(@params[:id].to_i - 1)]
+          puts "#{@request[:http_version]} 200 OK"
+          puts
+          puts
+          puts "Name: #{user[:first_name]} #{user[:last_name]}   Age: #{user[:age]}"
+        else
+          puts "#{@request[:http_version]} 404 NOT FOUND"
+          puts
+          puts
+          puts "Requested User Not Found"
+        end
+      end
+    end
 
     # YOUR CODE GOES ABOVE HERE  ^
   end
