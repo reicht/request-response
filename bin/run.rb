@@ -77,6 +77,7 @@ loop do
     # YOUR CODE GOES BELOW HERE
 
     Checkers.command_check(@request, @params)
+
     # if @request[:subdomain] == "localhost:3000"
     #   if @params[:resource] == "users"
     #     if @params[:id].nil?

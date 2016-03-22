@@ -17,30 +17,30 @@ class Checkers
       puts "#{target[:http_version]} 404 NOT FOUND"
       puts
       puts
-      puts "Not Found"
+      puts "Server Not Found"
     end
   end
 
   def Checkers.resource_check(target, params)
-    if target[:resource] == "users"
-      Checkers.resource_check(target, params)
+    if params[:resource] == "users"
+      Checkers.id_check(target, params)
     else
       puts "#{target[:http_version]} 404 NOT FOUND"
       puts
       puts
-      puts "Not Found"
+      puts "Server Resource Not Found"
     end
   end
 
   def Checkers.id_check(target, params)
-    if target[:id].nil?
+    if params[:id].nil?
       puts "#{target[:http_version]} 200 OK"
       puts
       puts
       USERS_LIST.each do |x|
         puts "Name: #{x[:first_name]} #{x[:last_name]}   Age: #{x[:age]}"
       end
-    elsif target[:id].to_i <= USERS_LIST.length
+    elsif params[:id].to_i <= USERS_LIST.length
       user = USERS_LIST[(target[:id].to_i - 1)]
       puts "#{target[:http_version]} 200 OK"
       puts
