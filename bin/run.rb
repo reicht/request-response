@@ -1,4 +1,7 @@
+require 'minitest/autorun'
+require 'minitest/pride'
 require_relative '../db/setup'
+require_relative '../bin/run'
 # Remember to put the requires here for all the classes you write and want to use
 
 USERS_LIST = [{:first_name => "Greg", :last_name => "Henry", :age => 34},
@@ -92,8 +95,43 @@ loop do
           puts "Requested User Not Found"
         end
       end
+    else
+      puts "#{@request[:http_version]} 404 NOT FOUND"
+      puts
+      puts
+      puts "Requested Server Not Found"
     end
 
     # YOUR CODE GOES ABOVE HERE  ^
+  end
+end
+
+class CommandCheck
+  def CommandCheck.run(target, params)
+    if target[:method] == "GET"
+      SubDomainCheck.run(target, params)
+    else
+      puts ""
+    end
+  end
+end
+
+class SubDomainCheck
+  def SubDomainCheck.run(target, params)
+    if target[:subdomain] == "localhost:3000"
+      ResourceCheck.run(target, params)
+    else
+      puts ""
+    end
+  end
+end
+
+class ResourceCheck
+  def ResourceCheck.run(target, params)
+    if target[:resource] == "users"
+      continue
+    else
+      puts ""
+    end
   end
 end
