@@ -41,7 +41,7 @@ class Checkers
         puts "Name: #{x[:first_name]} #{x[:last_name]}   Age: #{x[:age]}"
       end
     elsif params[:id].to_i <= USERS_LIST.length
-      user = USERS_LIST[(target[:id].to_i - 1)]
+      user = USERS_LIST[(params[:id].to_i - 1)]
       puts "#{target[:http_version]} 200 OK"
       puts
       puts
