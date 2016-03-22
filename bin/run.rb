@@ -62,6 +62,7 @@ loop do
 
   case raw_request
   when 'q' then puts "Goodbye!"; exit
+  when 't' then puts "Testing!"; break; #For testing bypass
   when 'h'
     puts "A valid HTTP Request looks like:"
     puts "\t'GET http://localhost:3000/students HTTP/1.1'"
@@ -111,7 +112,10 @@ class CommandCheck
     if target[:method] == "GET"
       SubDomainCheck.run(target, params)
     else
-      puts ""
+      puts "#{target[:http_version]} 405 METHOD NOT ALLOWED"
+      puts
+      puts
+      puts "Invalid Method"
     end
   end
 end
@@ -121,7 +125,10 @@ class SubDomainCheck
     if target[:subdomain] == "localhost:3000"
       ResourceCheck.run(target, params)
     else
-      puts ""
+      puts "#{target[:http_version]} 404 NOT FOUND"
+      puts
+      puts
+      puts "Not Found"
     end
   end
 end
@@ -129,9 +136,36 @@ end
 class ResourceCheck
   def ResourceCheck.run(target, params)
     if target[:resource] == "users"
-      continue
+      IdCheck.run(target, params)
     else
-      puts ""
+      puts "#{target[:http_version]} 404 NOT FOUND"
+      puts
+      puts
+      puts "Not Found"
+    end
+  end
+end
+
+class IdCheck
+  def IdCheck.run(target, params)
+    if target[:id].nil?
+      puts "#{target[:http_version]} 200 OK"
+      puts
+      puts
+      USERS_LIST.each do |x|
+        puts "Name: #{x[:first_name]} #{x[:last_name]}   Age: #{x[:age]}"
+      end
+    elsif target[:id].to_i <= USERS_LIST.length
+      user = USERS_LIST[(target[:id].to_i - 1)]
+      puts "#{target[:http_version]} 200 OK"
+      puts
+      puts
+      puts "Name: #{user[:first_name]} #{user[:last_name]}   Age: #{user[:age]}"
+    else
+      puts "#{target[:http_version]} 404 NOT FOUND"
+      puts
+      puts
+      puts "Requested User Not Found"
     end
   end
 end

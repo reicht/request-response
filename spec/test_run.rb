@@ -5,9 +5,10 @@ require_relative '../bin/run'
 
 class ReqResTest < Minitest::Test
 
-  def test_can_parse
-    tester = parse('http://www.google.com')
-    assert tester
+  def test_check_id
+    test_target = parse("GET http://www.google.com HTTP/1.1")
+    test_params = test_target[:params]
+    assert IdCheck.run(test_target, test_params)
   end
 
 end
