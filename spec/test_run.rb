@@ -8,7 +8,7 @@ class ReqResTest < Minitest::Test
   def test_check_id
     test_target = parse("GET http://www.google.com HTTP/1.1")
     test_params = test_target[:params]
-    assert IdCheck.run(test_target, test_params)
+    assert Checkers.id_check(test_target, test_params)
   end
 
 end

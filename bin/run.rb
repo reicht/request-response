@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 require 'minitest/pride'
 require_relative '../db/setup'
+require_relative '../lib/checkers'
 require_relative '../bin/run'
 # Remember to put the requires here for all the classes you write and want to use
 
@@ -74,98 +75,37 @@ loop do
     # return an appropriate response
 
     # YOUR CODE GOES BELOW HERE
-    if @request[:subdomain] == "localhost:3000"
-      if @params[:resource] == "users"
-        if @params[:id].nil?
-          puts "#{@request[:http_version]} 200 OK"
-          puts
-          puts
-          USERS_LIST.each do |x|
-            puts "Name: #{x[:first_name]} #{x[:last_name]}   Age: #{x[:age]}"
-          end
-        elsif @params[:id].to_i <= USERS_LIST.length
-          user = USERS_LIST[(@params[:id].to_i - 1)]
-          puts "#{@request[:http_version]} 200 OK"
-          puts
-          puts
-          puts "Name: #{user[:first_name]} #{user[:last_name]}   Age: #{user[:age]}"
-        else
-          puts "#{@request[:http_version]} 404 NOT FOUND"
-          puts
-          puts
-          puts "Requested User Not Found"
-        end
-      end
-    else
-      puts "#{@request[:http_version]} 404 NOT FOUND"
-      puts
-      puts
-      puts "Requested Server Not Found"
-    end
+
+    Checkers.command_check(@request, @params)
+    # if @request[:subdomain] == "localhost:3000"
+    #   if @params[:resource] == "users"
+    #     if @params[:id].nil?
+    #       puts "#{@request[:http_version]} 200 OK"
+    #       puts
+    #       puts
+    #       USERS_LIST.each do |x|
+    #         puts "Name: #{x[:first_name]} #{x[:last_name]}   Age: #{x[:age]}"
+    #       end
+    #     elsif @params[:id].to_i <= USERS_LIST.length
+    #       user = USERS_LIST[(@params[:id].to_i - 1)]
+    #       puts "#{@request[:http_version]} 200 OK"
+    #       puts
+    #       puts
+    #       puts "Name: #{user[:first_name]} #{user[:last_name]}   Age: #{user[:age]}"
+    #     else
+    #       puts "#{@request[:http_version]} 404 NOT FOUND"
+    #       puts
+    #       puts
+    #       puts "Requested User Not Found"
+    #     end
+    #   end
+    # else
+    #   puts "#{@request[:http_version]} 404 NOT FOUND"
+    #   puts
+    #   puts
+    #   puts "Requested Server Not Found"
+    # end
 
     # YOUR CODE GOES ABOVE HERE  ^
-  end
-end
-
-class CommandCheck
-  def CommandCheck.run(target, params)
-    if target[:method] == "GET"
-      SubDomainCheck.run(target, params)
-    else
-      puts "#{target[:http_version]} 405 METHOD NOT ALLOWED"
-      puts
-      puts
-      puts "Invalid Method"
-    end
-  end
-end
-
-class SubDomainCheck
-  def SubDomainCheck.run(target, params)
-    if target[:subdomain] == "localhost:3000"
-      ResourceCheck.run(target, params)
-    else
-      puts "#{target[:http_version]} 404 NOT FOUND"
-      puts
-      puts
-      puts "Not Found"
-    end
-  end
-end
-
-class ResourceCheck
-  def ResourceCheck.run(target, params)
-    if target[:resource] == "users"
-      IdCheck.run(target, params)
-    else
-      puts "#{target[:http_version]} 404 NOT FOUND"
-      puts
-      puts
-      puts "Not Found"
-    end
-  end
-end
-
-class IdCheck
-  def IdCheck.run(target, params)
-    if target[:id].nil?
-      puts "#{target[:http_version]} 200 OK"
-      puts
-      puts
-      USERS_LIST.each do |x|
-        puts "Name: #{x[:first_name]} #{x[:last_name]}   Age: #{x[:age]}"
-      end
-    elsif target[:id].to_i <= USERS_LIST.length
-      user = USERS_LIST[(target[:id].to_i - 1)]
-      puts "#{target[:http_version]} 200 OK"
-      puts
-      puts
-      puts "Name: #{user[:first_name]} #{user[:last_name]}   Age: #{user[:age]}"
-    else
-      puts "#{target[:http_version]} 404 NOT FOUND"
-      puts
-      puts
-      puts "Requested User Not Found"
-    end
   end
 end
